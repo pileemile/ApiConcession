@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 class Customer
 {
+    //test
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
