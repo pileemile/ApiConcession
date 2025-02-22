@@ -30,7 +30,7 @@ final class CustomerController extends AbstractController
         );
     }
 
-    #[Route('/customer/add', name: 'customer.add', methods: ['POST'])]
+    #[Route('/customer', name: 'customer.add', methods: ['POST'])]
     public function addCustomer(
         Request $request,
         SerializerInterface $serializer,
