@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use OpenApi\Attributes as OA;
 use App\Repository\CustomerRepository;
 use App\Entity\Customer;
@@ -78,20 +79,19 @@ final class CustomerController extends AbstractController
     public function addCustomer(
         Request $request,
         SerializerInterface $serializer,
-        CustomerRepository $customerRepository
+        CustomerRepository $customerRepository,
+        EntityManagerInterface $entityManager
     ): JsonResponse {
-        $data = json_decode($request->getContent(), true);
-
         $customer = $serializer->deserialize(
             $request->getContent(),
             Customer::class,
             'json'
         );
 
-        $customerRepository->save($customer, true);
-
+        $entityManager->persist($customer);
+        $entityManager->flush();
         return new JsonResponse(
-            $customer,
+            $serializer->serialize($customer, 'json'),
             Response::HTTP_CREATED,
             [],
             true
