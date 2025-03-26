@@ -32,6 +32,29 @@ nelmio_api_doc:
                             type: string
                             format: date-time
                             description: 'Date d''inscription du client'
+                Seller:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: 'ID du vendeur'
+                        name:
+                            type: string
+                            description: 'Nom du vendeur'
+                        prenom:
+                            type: string
+                            description: 'Prénom du vendeur'
+                        email:
+                            type: string
+                            format: email
+                            description: 'Email du vendeur'
+                        telephone:
+                            type: string
+                            description: 'Téléphone du vendeur'
+                        dateEmbauche:
+                            type: string
+                            format: date-time
+                            description: 'Date d''embauche du vendeur'
     
     areas:
         default:
