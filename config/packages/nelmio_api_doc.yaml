@@ -64,6 +64,22 @@ nelmio_api_doc:
                         name:
                             type: string
                             description: 'Nom de l''option'
+                Reparation:
+                    type: object
+                    properties: 
+                        id:
+                            type: interger
+                            description: 'ID de la réparation'
+                        description:
+                            type: string
+                            description: 'Description de la réparation'
+                        repair_date:
+                            type: string
+                            format: date-time
+                            description: 'Date de la réparation'
+                        cost:
+                            type: float
+                            description: 'Coût de la réparation'
                         
     
     areas:

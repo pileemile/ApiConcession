@@ -1,5 +1,4 @@
 <?php
-// OptionController.php
 namespace App\Controller;
 
 use App\Entity\Option;
