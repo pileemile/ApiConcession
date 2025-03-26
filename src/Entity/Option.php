@@ -6,22 +6,31 @@ use App\Repository\OptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Attributes as OA;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OptionRepository::class)]
+#[OA\Schema(
+    schema: "Options",
+    description: "Représentation d'une option"
+)]
 class Option
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getAllOption"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(["getAllOption"])]
     private ?string $name = null;
 
     /**
      * @var Collection<int, VehicleOption>
      */
     #[ORM\ManyToMany(targetEntity: VehicleOption::class, mappedBy: 'option')]
+    #[Groups(["getAllOption"])]
     private Collection $vehicleOptions;
 
     public function __construct()
