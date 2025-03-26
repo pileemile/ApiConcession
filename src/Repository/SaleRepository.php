@@ -16,6 +16,12 @@ class SaleRepository extends ServiceEntityRepository
         parent::__construct($registry, Sale::class);
     }
 
+    public function findAll(): array
+    {
+        $sale = $this->findBy([]);
+        return $sale;
+    }
+
 //    /**
 //     * @return Sale[] Returns an array of Sale objects
 //     */
