@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SupplyRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SupplyRepository::class)]
 class Supply
@@ -12,21 +13,27 @@ class Supply
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getAllSupply"])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
+    #[Groups(["getAllSupply"])]
     private ?supplier $supplier = null;
 
     #[ORM\ManyToOne]
+    #[Groups(["getAllSupply"])]
     private ?Vehicle $vehicle = null;
 
     #[ORM\Column]
+    #[Groups(["getAllSupply"])]
     private ?int $quantity = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(["getAllSupply"])]
     private ?\DateTimeInterface $supplyDate = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(["getAllSupply"])]
     private ?string $purchasePrice = null;
 
     public function getId(): ?int
