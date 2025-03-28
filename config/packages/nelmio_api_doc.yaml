@@ -93,7 +93,25 @@ nelmio_api_doc:
                         salePrice:
                             type: float
                             description: 'Prix de la vente'
-                        
+                Supplier:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                            description: 'Nom du fournisseur'
+                        contact:
+                            type: string
+                            description: 'Contact du fournisseur'
+                        address:
+                            type: string
+                            description: 'Adresse du fournisseur'
+                        email:
+                            type: string
+                            format: email
+                            description: 'Email du fournisseur'
+                        phone:
+                            type: string
+                            description: 'Téléphone du fournisseur'
     
     areas:
         default:

@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SaleController extends AbstractController
 {
-    #[Route('/api/sale', name: 'reparation_list', methods: ['GET'])]
+    #[Route('/api/sale', name: 'Sale_list', methods: ['GET'])]
     #[OA\Get(
         path: "/api/sale",
         summary: "Liste des sale",
@@ -75,12 +75,12 @@ class SaleController extends AbstractController
     public function addSale(
         Request $request,
         SerializerInterface $serializer,
-        SaleRepository $reparationRepository,
+        SaleRepository $saleRepository,
         EntityManagerInterface $entityManager
     ): JsonResponse {
         $sale = $serializer->deserialize(
             $request->getContent(),
-            Reparation::class,
+            Sale::class,
             'json'
         );
 
