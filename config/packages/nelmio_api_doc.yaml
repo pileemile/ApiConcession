@@ -181,6 +181,18 @@ nelmio_api_doc:
                             type: string
                             format: date-time
                             description: 'Date de création du véhicule'
+                VehicleOption:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: "ID de l'option du véhicule"
+                            example: 1
+                        options:
+                            type: array
+                            description: "Liste des options associées au véhicule"
+                            items:
+                                $ref: "#/components/schemas/Option"
 
     areas:
         default:

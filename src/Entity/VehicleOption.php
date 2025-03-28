@@ -6,6 +6,7 @@ use App\Repository\VehicleOptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: VehicleOptionRepository::class)]
 class VehicleOption
@@ -13,12 +14,14 @@ class VehicleOption
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getAllVehicleOption"])]
     private ?int $id = null;
 
     /**
      * @var Collection<int, Option>
      */
     #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'vehicleOptions')]
+    #[Groups(["getAllVehicleOption"])]
     private Collection $option;
 
     public function __construct()
