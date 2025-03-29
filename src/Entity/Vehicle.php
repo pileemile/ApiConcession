@@ -9,6 +9,7 @@ use App\Enum\VehicleType;
 use App\Repository\VehicleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: VehicleRepository::class)]
 class Vehicle
@@ -16,36 +17,47 @@ class Vehicle
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getAllVehicle"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["getAllVehicle"])]
     private ?string $brand = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["getAllVehicle"])]
     private ?string $model = null;
 
     #[ORM\Column]
+    #[Groups(["getAllVehicle"])]
     private ?int $year = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(["getAllVehicle"])]
     private ?float $price = null;
 
     #[ORM\Column]
+    #[Groups(["getAllVehicle"])]
     private ?int $mileage = null;
 
     #[ORM\Column(type: Types::STRING, length: 20, enumType: VehicleType::class)]
+    #[Groups(["getAllVehicle"])]
     private VehicleType $type;
 
     #[ORM\Column(length: 20)]
+    #[Groups(["getAllVehicle"])]
     private FuelType $fuelType;
 
     #[ORM\Column(length: 20)]
+    #[Groups(["getAllVehicle"])]
     private TransmissionType $transmissionType;
 
     #[ORM\Column(length: 20)]
+    #[Groups(["getAllVehicle"])]
     private VehicleStatus $status;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(["getAllVehicle"])]
     private ?\DateTimeInterface $createdAt;
 
     public function getId(): ?int

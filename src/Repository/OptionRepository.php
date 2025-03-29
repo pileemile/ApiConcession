@@ -16,6 +16,14 @@ class OptionRepository extends ServiceEntityRepository
         parent::__construct($registry, Option::class);
     }
 
+    // OptionRepository.php
+    public function findAll(): array
+    {
+        $option = $this->findBy([]);
+        return $option;
+    }
+
+
     //    /**
     //     * @return Option[] Returns an array of Option objects
     //     */

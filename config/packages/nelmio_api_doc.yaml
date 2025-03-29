@@ -32,7 +32,168 @@ nelmio_api_doc:
                             type: string
                             format: date-time
                             description: 'Date d''inscription du client'
-    
+
+                Seller:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: 'ID du vendeur'
+                        name:
+                            type: string
+                            description: 'Nom du vendeur'
+                        prenom:
+                            type: string
+                            description: 'Prénom du vendeur'
+                        email:
+                            type: string
+                            format: email
+                            description: 'Email du vendeur'
+                        telephone:
+                            type: string
+                            description: 'Téléphone du vendeur'
+                        dateEmbauche:
+                            type: string
+                            format: date-time
+                            description: 'Date d''embauche du vendeur'
+
+                Option:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: 'ID de l''option'
+                        name:
+                            type: string
+                            description: 'Nom de l''option'
+
+                Reparation:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: 'ID de la réparation'
+                        description:
+                            type: string
+                            description: 'Description de la réparation'
+                        repair_date:
+                            type: string
+                            format: date-time
+                            description: 'Date de la réparation'
+                        cost:
+                            type: number
+                            format: float
+                            description: 'Coût de la réparation'
+
+                Sale:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: 'ID de la vente'
+                        saleDate:
+                            type: string
+                            format: date-time
+                            description: 'Date de la vente'
+                        salePrice:
+                            type: number
+                            format: float
+                            description: 'Prix de la vente'
+
+                Supplier:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                            description: 'Nom du fournisseur'
+                        contact:
+                            type: string
+                            description: 'Contact du fournisseur'
+                        address:
+                            type: string
+                            description: 'Adresse du fournisseur'
+                        email:
+                            type: string
+                            format: email
+                            description: 'Email du fournisseur'
+                        phone:
+                            type: string
+                            description: 'Téléphone du fournisseur'
+
+                Supply:
+                    type: object
+                    properties:
+                        supplier:
+                            $ref: "#/components/schemas/Supplier"
+                        vehicle:
+                            type: string
+                            description: 'Nom du véhicule'
+                        quantity:
+                            type: integer
+                            description: 'Quantité'
+                        supplyDate:
+                            type: string
+                            format: date-time
+                            description: 'Date de la fourniture'
+                        purchasePrice:
+                            type: number
+                            format: float
+                            description: 'Prix d''achat'
+                Vehicle:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: 'ID du véhicule'
+                        brand:
+                            type: string
+                            description: 'Marque du véhicule'
+                        model:
+                            type: string
+                            description: 'Modèle du véhicule'
+                        year:
+                            type: integer
+                            description: 'Année du véhicule'
+                        price:
+                            type: number
+                            format: float
+                            description: 'Prix du véhicule'
+                        mileage:
+                            type: integer
+                            description: 'Kilométrage du véhicule'
+                        type:
+                            type: string
+                            enum: [ new, used ] 
+                            description: 'Type de véhicule'
+                        fuelType:
+                            type: string
+                            enum: [ essence, diesel, électrique, hybride ]  
+                            description: 'Type de carburant'
+                        transmissionType:
+                            type: string
+                            enum: [ manuelle, automatique ] 
+                            description: 'Type de transmission'
+                        status:
+                            type: string
+                            enum: [ disponible, vendu ] 
+                            description: 'Statut du véhicule'
+                        createdAt:
+                            type: string
+                            format: date-time
+                            description: 'Date de création du véhicule'
+                VehicleOption:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: "ID de l'option du véhicule"
+                            example: 1
+                        options:
+                            type: array
+                            description: "Liste des options associées au véhicule"
+                            items:
+                                $ref: "#/components/schemas/Option"
+
     areas:
         default:
             path_patterns:

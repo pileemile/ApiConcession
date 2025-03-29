@@ -16,6 +16,12 @@ class ReparationRepository extends ServiceEntityRepository
         parent::__construct($registry, Reparation::class);
     }
 
+    public function findAll(): array
+    {
+        $reparation = $this->findBy([]);
+        return $reparation;
+    }
+
     //    /**
     //     * @return Reparation[] Returns an array of Reparation objects
     //     */
