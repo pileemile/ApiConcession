@@ -26,12 +26,12 @@ class AppFixtures extends Fixture
 
     public function __construct()
     {
-        $this->faker = Factory::create('fr_FR'); // Faker en français
+        $this->faker = Factory::create('fr_FR');
     }
 
     public function load(ObjectManager $manager): void
     {
-        // Création de 20 clients
+        // Création de clients
         for ($i = 0; $i < 20; $i++) {
             $customer = new Customer();
             $customer
@@ -41,12 +41,11 @@ class AppFixtures extends Fixture
                 ->setPhone($this->faker->unique()->phoneNumber())
                 ->setAdress($this->faker->address())
                 ->setRegisterDate(new \DateTime());
-
             $manager->persist($customer);
         }
 
-        // Création de 20 vendeurs
-        for ($i = 0; $i < 20; $i++) {
+        // Création de vendeurs
+        for ($i = 0; $i < 10; $i++) {
             $seller = new Seller();
             $seller
                 ->setName($this->faker->lastName())
@@ -54,66 +53,86 @@ class AppFixtures extends Fixture
                 ->setEmail($this->faker->unique()->email())
                 ->setTelephone($this->faker->unique()->phoneNumber())
                 ->setDateEmbauche(new \DateTime());
-
             $manager->persist($seller);
         }
 
-        // Création de 10 options
-        $options = [];
-        for ($i = 0; $i < 10; $i++) {
-            $option = new Option();
-            $option->setName($this->faker->word());
+        // Options réelles
+        $optionNames = [
+            "Climatisation", "GPS", "Sièges chauffants", "Toit ouvrant",
+            "Caméra de recul", "Régulateur de vitesse", "Freinage automatique",
+            "Écran tactile", "Bluetooth", "Phares LED"
+        ];
 
+        $options = [];
+        foreach ($optionNames as $name) {
+            $option = new Option();
+            $option->setName($name);
             $manager->persist($option);
             $options[] = $option;
         }
 
-        // Création de 20 véhicules
+        // Marques et modèles réalistes
+        $brandsModels = [
+            "Toyota" => ["Yaris", "Corolla", "RAV4"],
+            "Renault" => ["Clio", "Megane", "Captur"],
+            "Peugeot" => ["208", "308", "3008"],
+            "BMW" => ["Serie 1", "Serie 3", "X5"],
+            "Audi" => ["A1", "A3", "Q5"]
+        ];
+
+        // Création des véhicules
         $vehicles = [];
-        for ($i = 0; $i < 20; $i++) {
-            $vehicle = new Vehicle();
-            $vehicle
-                ->setBrand($this->faker->company())
-                ->setModel($this->faker->word())
-                ->setYear($this->faker->year())
-                ->setPrice($this->faker->randomFloat(2, 5000, 50000))
-                ->setMileage($this->faker->numberBetween(1000, 200000))
-                ->setType(VehicleType::cases()[array_rand(VehicleType::cases())])
-                ->setFuelType(FuelType::cases()[array_rand(FuelType::cases())])
-                ->setTransmissionType(TransmissionType::cases()[array_rand(TransmissionType::cases())])
-                ->setStatus(VehicleStatus::cases()[array_rand(VehicleStatus::cases())])
-                ->setCreatedAt(new \DateTime());
+        foreach ($brandsModels as $brand => $models) {
+            foreach ($models as $model) {
+                $vehicle = new Vehicle();
+                $vehicle
+                    ->setBrand($brand)
+                    ->setModel($model)
+                    ->setYear($this->faker->numberBetween(2015, 2024))
+                    ->setPrice($this->faker->randomFloat(2, 8000, 70000))
+                    ->setMileage($this->faker->numberBetween(5000, 150000))
+                    ->setType($this->faker->randomElement(VehicleType::cases()))
+                    ->setFuelType($this->faker->randomElement(FuelType::cases()))
+                    ->setTransmissionType($this->faker->randomElement(TransmissionType::cases()))
+                    ->setStatus($this->faker->randomElement(VehicleStatus::cases()))
+                    ->setCreatedAt(new \DateTime());
 
-            $manager->persist($vehicle);
-            $vehicles[] = $vehicle;
+                // Ajout d'options réalistes
+                $numOptions = $this->faker->numberBetween(2, 5);
+                foreach ($this->faker->randomElements($options, $numOptions) as $option) {
+                    $vehicleOption = new VehicleOption();
+                    $vehicleOption->addOption($option);
+                    $manager->persist($vehicleOption);
+                }
+
+                $manager->persist($vehicle);
+                $vehicles[] = $vehicle;
+            }
         }
 
-        // Création de 20 réparations
-        for ($i = 0; $i < 20; $i++) {
-            $repair = new Reparation();
-            $repair
-                ->setVehicle($vehicles[$this->faker->numberBetween(0, 19)])
-                ->setDescription($this->faker->sentence())
-                ->setRepairDate($this->faker->dateTimeThisDecade())
-                ->setCost($this->faker->randomFloat(2, 50, 500));
-
-            $manager->persist($repair);
-        }
-
-        // Création de 10 ventes
+        // Création des ventes et réparations
         for ($i = 0; $i < 10; $i++) {
             $sale = new Sale();
             $sale
                 ->setSaleDate($this->faker->dateTimeThisDecade())
-                ->setSalePrice($this->faker->randomFloat(2, 1000, 50000))
-                ->setVehicle($vehicles[$this->faker->numberBetween(0, 19)]);
-
+                ->setSalePrice($this->faker->randomFloat(2, 10000, 50000))
+                ->setVehicle($vehicles[array_rand($vehicles)]);
             $manager->persist($sale);
         }
 
-        // Création de 10 fournisseurs
-        $suppliers = [];
         for ($i = 0; $i < 10; $i++) {
+            $repair = new Reparation();
+            $repair
+                ->setVehicle($vehicles[array_rand($vehicles)])
+                ->setDescription($this->faker->sentence())
+                ->setRepairDate($this->faker->dateTimeThisDecade())
+                ->setCost($this->faker->randomFloat(2, 100, 2000));
+            $manager->persist($repair);
+        }
+
+        // Création de fournisseurs
+        $suppliers = [];
+        for ($i = 0; $i < 5; $i++) {
             $supplier = new Supplier();
             $supplier
                 ->setName($this->faker->company())
@@ -121,35 +140,20 @@ class AppFixtures extends Fixture
                 ->setAdress($this->faker->address())
                 ->setEmail($this->faker->unique()->email())
                 ->setPhone($this->faker->unique()->phoneNumber());
-
             $manager->persist($supplier);
             $suppliers[] = $supplier;
         }
 
-        // Création de 20 approvisionnements
-        for ($i = 0; $i < 20; $i++) {
+        // Création d'approvisionnements
+        for ($i = 0; $i < 10; $i++) {
             $supply = new Supply();
             $supply
-                ->setSupplier($suppliers[$this->faker->numberBetween(0, 9)])
-                ->setVehicle($vehicles[$this->faker->numberBetween(0, 19)])
-                ->setQuantity($this->faker->numberBetween(1, 10))
+                ->setSupplier($suppliers[array_rand($suppliers)])
+                ->setVehicle($vehicles[array_rand($vehicles)])
+                ->setQuantity($this->faker->numberBetween(1, 5))
                 ->setSupplyDate($this->faker->dateTimeThisDecade())
-                ->setPurchasePrice($this->faker->randomFloat(2, 100, 1000));
-
+                ->setPurchasePrice($this->faker->randomFloat(2, 5000, 40000));
             $manager->persist($supply);
-        }
-
-        // Création de 10 options de véhicules
-        for ($i = 0; $i < 10; $i++) {
-            $vehicleOption = new VehicleOption();
-            $numOptions = $this->faker->numberBetween(1, 5);
-            $selectedOptions = $this->faker->randomElements($options, $numOptions);
-
-            foreach ($selectedOptions as $option) {
-                $vehicleOption->addOption($option);
-            }
-
-            $manager->persist($vehicleOption);
         }
 
         $manager->flush();

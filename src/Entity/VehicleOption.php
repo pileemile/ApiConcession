@@ -20,7 +20,8 @@ class VehicleOption
     /**
      * @var Collection<int, Option>
      */
-    #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'vehicleOptions')]
+    #[ORM\ManyToMany(targetEntity: Option::class, inversedBy: 'vehicleOption')]
+    #[ORM\JoinTable(name: "vehicle_option_option")]
     #[Groups(["getAllVehicleOption"])]
     private Collection $option;
 

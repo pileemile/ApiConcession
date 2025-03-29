@@ -37,7 +37,11 @@ class OptionController extends AbstractController
         SerializerInterface $serializer
     ): JsonResponse
     {
-        $option = $repository->findAll();
+        $option = $repository->createQueryBuilder('o')
+            ->leftJoin('o.vehicleOptions', 'vo')
+            ->addSelect('vo')
+            ->getQuery()
+            ->getResult();
         $jsonCustomers = $serializer->serialize($option, 'json', ["groups" => "getAllOption"]);
 
         return new JsonResponse($jsonCustomers, Response::HTTP_OK, [], true);
@@ -52,10 +56,10 @@ class OptionController extends AbstractController
             required: true,
             content: new OA\JsonContent(
                 type: "object",
-                required: ["name",],
+                required: ["name","vehicleOptions"],
                 properties: [
                     new OA\Property(property: "name", type: "string", example: "John"),
-                    new OA\Property(property: "vehicleOptions", type: "array", items: new OA\Items(type: "integer"), example: [1, 2])
+                    new OA\Property(property: "vehicleOptions", ref: "#/components/schemas/VehicleOption"),
                 ]
             )
         ),
@@ -168,7 +172,7 @@ class OptionController extends AbstractController
             )
         ]
     )]
-    public function deleteCustomer(
+    public function deleteOption(
         int $id,
         OptionRepository $repository,
         EntityManagerInterface $entityManager
