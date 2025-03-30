@@ -19,14 +19,19 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
+use App\Entity\User;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 
 class AppFixtures extends Fixture
 {
     private Generator $faker;
+    private UserPasswordHasherInterface $passwordHasher;
 
-    public function __construct()
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
         $this->faker = Factory::create('fr_FR');
+        $this->passwordHasher = $passwordHasher;
     }
 
     public function load(ObjectManager $manager): void
@@ -154,6 +159,37 @@ class AppFixtures extends Fixture
                 ->setSupplyDate($this->faker->dateTimeThisDecade())
                 ->setPurchasePrice($this->faker->randomFloat(2, 5000, 40000));
             $manager->persist($supply);
+        }
+
+        // Création des utilisateurs
+        $users = [];
+
+        // Création d'un administrateur
+        $admin = new User();
+        $admin->setEmail('admin@example.com');
+        $admin->setRoles(['ROLE_ADMIN']);
+        $admin->setPassword($this->passwordHasher->hashPassword($admin, 'admin123'));
+        $manager->persist($admin);
+        $users[] = $admin;
+
+        // Création de vendeurs (ROLE_SELLER)
+        for ($i = 0; $i < 5; $i++) {
+            $seller = new User();
+            $seller->setEmail($this->faker->unique()->email());
+            $seller->setRoles(['ROLE_SELLER']);
+            $seller->setPassword($this->passwordHasher->hashPassword($seller, 'seller123'));
+            $manager->persist($seller);
+            $users[] = $seller;
+        }
+
+        // Création de clients (ROLE_CUSTOMER)
+        for ($i = 0; $i < 10; $i++) {
+            $customer = new User();
+            $customer->setEmail($this->faker->unique()->email());
+            $customer->setRoles(['ROLE_CUSTOMER']);
+            $customer->setPassword($this->passwordHasher->hashPassword($customer, 'customer123'));
+            $manager->persist($customer);
+            $users[] = $customer;
         }
 
         $manager->flush();

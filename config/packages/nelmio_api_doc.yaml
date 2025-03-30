@@ -193,6 +193,24 @@ nelmio_api_doc:
                             description: "Liste des options associées au véhicule"
                             items:
                                 $ref: "#/components/schemas/Option"
+                User:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            description: 'ID de l''utilisateur'
+                        email:
+                            type: string
+                            format: email
+                            description: 'Email de l''utilisateur'
+                        roles:
+                            type: array
+                            items:
+                                type: string
+                            description: 'Rôles de l''utilisateur'
+                        password:
+                            type: string
+                            description: 'Mot de passe de l''utilisateur'
 
     areas:
         default:
